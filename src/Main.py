@@ -34,4 +34,8 @@ if __name__ == '__main__':
         iterations += 1
 
     print('Finished in', iterations, 'iterations.')
-    print('Solutions:', len(tree.solutions))
+    print('Solutions:', len(container.solutions))
+
+    if len(container.solutions) > 0:
+        print('\nSolution 0:')
+        print(container.solutions[0])

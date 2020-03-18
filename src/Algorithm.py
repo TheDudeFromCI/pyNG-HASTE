@@ -79,20 +79,17 @@ class NodeGraph:
         return graph
 
     def __str__(self):
-        s = 'Graph:\n'
+        if self.isSolution():
+            s = 'Graph: (Solution, Fitness: {:.1f})'.format(self.fitness)
+        else:
+            s = 'Graph: (Heuristic: {:.1f}'.format(self.heuristic)
 
         for index, node in enumerate(self.nodes):
-            if s:
-                s += '\n'
-
-            s += '  {}) {}'.format(index, node)
+            s += '\n  {}) {}'.format(index, node)
 
         for index, conn in enumerate(self.connections):
-            if s:
-                s += '\n'
-
-            s += '  {}:{} => {}:{}'.format(conn.outputNode.index,
-                                           conn.outputPlug, conn.inputNode.index, conn.inputPlug)
+            s += '\n  {}:{} => {}:{}'.format(conn.outputNode.index,
+                                             conn.outputPlug, conn.inputNode.index, conn.inputPlug)
 
         return s
 
@@ -174,6 +171,7 @@ class NodeGraph:
 class GraphContainer:
     def __init__(self):
         self.graphs = []
+        self.solutions = []
 
     def isEmpty(self):
         return len(self.graphs) == 0
@@ -187,6 +185,10 @@ class GraphContainer:
     def push(self, graph):
         self.graphs.append(graph)
         self.graphs.sort(key=lambda g: g.heuristic)
+
+    def addSolution(self, graph):
+        self.solutions.append(graph)
+        self.graphs.sort(key=lambda g: g.fitness, reverse=True)
 
 
 class Axiom:
@@ -237,7 +239,6 @@ class SearchTree:
     def __init__(self, container, env):
         self.container = container
         self.env = env
-        self.solutions = []
 
     def nextItr(self):
         graph = self.container.pull()
@@ -265,7 +266,7 @@ class SearchTree:
                 for fitnessTest in self.env.fitnessTests:
                     child.fitness += fitnessTest.getValue(child)
 
-                self.solutions.append(child)
+                self.container.addSolution(child)
             else:
                 child.heuristic = 0
                 for heuristic in self.env.heuristics:
