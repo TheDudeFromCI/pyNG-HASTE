@@ -1,58 +1,31 @@
-from Algorithm import DataType, Function, Node, Connection, NodeGraph, GraphContainer
-from Algorithm import Environment, Axiom, Heuristic, Test, FitnessTest, SearchTree
-
-
-class NumberDataType(DataType):
-    def connectsTo(self, dataType):
-        return isinstance(dataType, NumberDataType)
-
-
-class OutputNumberFunction(Function):
-    def __init__(self):
-        super().__init__([NumberDataType()], [])
-
-    def run(self):
-        pass
-
-
-class AddFunction(Function):
-    def __init__(self):
-        super().__init__(
-            [NumberDataType(), NumberDataType()], [NumberDataType()])
-
-    def run(self):
-        pass
-
-
-class InputNumberFunction(Function):
-    def __init__(self):
-        super().__init__([], [NumberDataType()])
-
-    def run(self):
-        pass
-
-
-class MaxConnectionsAxiom(Axiom):
-    def __init__(self, max):
-        self.max = max
-
-    def isValid(self, graph):
-        return len(graph.connections) <= self.max
-
+import StandardLibrary
+import MathLibrary
+import Algorithm
 
 if __name__ == '__main__':
-    graph = NodeGraph()
-    graph.addNode(OutputNumberFunction())
+    graph = Algorithm.NodeGraph()
+    graph.addNode(MathLibrary.OutputNumberFunction())
+    graph.addNode(MathLibrary.InputNumberFunction())
+    graph.addNode(MathLibrary.InputNumberFunction())
 
-    container = GraphContainer()
+    container = Algorithm.GraphContainer()
     container.push(graph)
 
-    env = Environment()
-    env.addAxiom(MaxConnectionsAxiom(3))
-    env.addFunction(AddFunction())
-    env.addFunction(InputNumberFunction())
+    env = Algorithm.Environment()
+    env.addAxiom(StandardLibrary.MaxConnectionsAxiom(5))
+    env.addFunction(MathLibrary.AddFunction())
+    env.addFunction(MathLibrary.MultiplyFunction())
+    env.addFunction(MathLibrary.DivideFunction())
+    env.addFunction(MathLibrary.SubtractFunction())
+    env.addFunction(MathLibrary.ExponentFunction())
+    env.addFunction(MathLibrary.AddIntFunction())
+    env.addFunction(MathLibrary.MultiplyIntFunction())
+    env.addFunction(MathLibrary.DivideIntFunction())
+    env.addFunction(MathLibrary.SubtractIntFunction())
+    env.addFunction(MathLibrary.ExponentIntFunction())
+    env.addFitnessTest(StandardLibrary.FewerConnectionsFitness(magnitude=0.5))
 
-    tree = SearchTree(container, env)
+    tree = Algorithm.SearchTree(container, env)
 
     print('Running...')
     iterations = 0
@@ -61,7 +34,4 @@ if __name__ == '__main__':
         iterations += 1
 
     print('Finished in', iterations, 'iterations.')
-
-    print('Solutions: ({})\n\n'.format(len(tree.solutions)))
-    for solution in tree.solutions:
-        print(solution, '\n')
+    print('Solutions:', len(tree.solutions))
