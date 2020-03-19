@@ -2,14 +2,14 @@ import StandardLibrary
 import MathLibrary
 import Algorithm
 
-if __name__ == '__main__':
-    graph = Algorithm.NodeGraph()
-    graph.addNode(MathLibrary.OutputNumberFunction())
-    graph.addNode(MathLibrary.InputNumberFunction())
-    graph.addNode(MathLibrary.InputNumberFunction())
 
+if __name__ == '__main__':
     container = Algorithm.GraphContainer()
-    container.push(graph)
+    container.push(Algorithm.buildGraph([
+        MathLibrary.InputIntegerFunction(),
+        MathLibrary.InputIntegerFunction(),
+        MathLibrary.InputIntegerFunction(),
+    ], MathLibrary.OutputIntegerFunction()))
 
     env = Algorithm.Environment()
     env.addAxiom(StandardLibrary.MaxConnectionsAxiom(5))
@@ -24,6 +24,8 @@ if __name__ == '__main__':
     env.addFunction(MathLibrary.SubtractIntFunction())
     env.addFunction(MathLibrary.ExponentIntFunction())
     env.addFitnessTest(StandardLibrary.FewerConnectionsFitness(magnitude=0.5))
+    env.addTest(StandardLibrary.InputOutputTest([1, 5, 2], [12]))
+    env.addTest(StandardLibrary.AllInputsUsedTest(3))
 
     tree = Algorithm.SearchTree(container, env)
 
@@ -36,6 +38,6 @@ if __name__ == '__main__':
     print('Finished in', iterations, 'iterations.')
     print('Solutions:', len(container.solutions))
 
-    if len(container.solutions) > 0:
-        print('\nSolution 0:')
-        print(container.solutions[0])
+    for solution in container.solutions:
+        print()
+        print(solution)

@@ -11,7 +11,7 @@ class Function:
         self.inputs = inputs
         self.outputs = outputs
 
-    def run(self):
+    def run(self, inputs):
         raise NotImplementedError
 
 
@@ -104,7 +104,7 @@ class NodeGraph:
         conns = []
 
         for conn in self.connections:
-            if conn.outputNode == node and conn.outputPlug == plugIndex:
+            if conn.outputNode is node and conn.outputPlug == plugIndex:
                 conns.append(conn)
 
         return conns
@@ -148,8 +148,9 @@ class NodeGraph:
                 if outputPlug.connectsTo(dataType):
                     child = self.copy()
 
+                    newNode = child.nodes[sibNode.index]
                     oldNode = child.nodes[node.index]
-                    conn = Connection(sibNode, outputPlugIndex, oldNode, plug)
+                    conn = Connection(newNode, outputPlugIndex, oldNode, plug)
 
                     child.addConnection(conn)
                     children.append(child)
@@ -273,3 +274,13 @@ class SearchTree:
                     child.heuristic += heuristic.getValue(child)
 
                 self.container.push(child)
+
+
+def buildGraph(inputs, output):
+    graph = NodeGraph()
+    graph.addNode(output)
+
+    for input in inputs:
+        graph.addNode(input)
+
+    return graph

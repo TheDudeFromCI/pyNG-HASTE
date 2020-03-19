@@ -1,4 +1,5 @@
 from Algorithm import DataType, Function, Axiom
+import math
 
 
 class NumberDataType(DataType):
@@ -16,7 +17,15 @@ class OutputNumberFunction(Function):
     def __init__(self):
         super().__init__([NumberDataType()], [])
 
-    def run(self):
+    def run(self, inputs):
+        pass
+
+
+class OutputIntegerFunction(Function):
+    def __init__(self):
+        super().__init__([IntegerDataType()], [])
+
+    def run(self, inputs):
         pass
 
 
@@ -25,8 +34,8 @@ class AddFunction(Function):
         super().__init__(
             [NumberDataType(), NumberDataType()], [NumberDataType()])
 
-    def run(self):
-        pass
+    def run(self, inputs):
+        return [inputs[0] + inputs[1]]
 
 
 class MultiplyFunction(Function):
@@ -34,8 +43,8 @@ class MultiplyFunction(Function):
         super().__init__(
             [NumberDataType(), NumberDataType()], [NumberDataType()])
 
-    def run(self):
-        pass
+    def run(self, inputs):
+        return [inputs[0] * inputs[1]]
 
 
 class DivideFunction(Function):
@@ -43,8 +52,8 @@ class DivideFunction(Function):
         super().__init__(
             [NumberDataType(), NumberDataType()], [NumberDataType()])
 
-    def run(self):
-        pass
+    def run(self, inputs):
+        return [inputs[0] / inputs[1]]
 
 
 class SubtractFunction(Function):
@@ -52,8 +61,8 @@ class SubtractFunction(Function):
         super().__init__(
             [NumberDataType(), NumberDataType()], [NumberDataType()])
 
-    def run(self):
-        pass
+    def run(self, inputs):
+        return [inputs[0] - inputs[1]]
 
 
 class AddIntFunction(Function):
@@ -61,8 +70,8 @@ class AddIntFunction(Function):
         super().__init__(
             [IntegerDataType(), IntegerDataType()], [IntegerDataType()])
 
-    def run(self):
-        pass
+    def run(self, inputs):
+        return [inputs[0] + inputs[1]]
 
 
 class MultiplyIntFunction(Function):
@@ -70,8 +79,8 @@ class MultiplyIntFunction(Function):
         super().__init__(
             [IntegerDataType(), IntegerDataType()], [IntegerDataType()])
 
-    def run(self):
-        pass
+    def run(self, inputs):
+        return [inputs[0] * inputs[1]]
 
 
 class DivideIntFunction(Function):
@@ -79,8 +88,8 @@ class DivideIntFunction(Function):
         super().__init__(
             [IntegerDataType(), IntegerDataType()], [IntegerDataType()])
 
-    def run(self):
-        pass
+    def run(self, inputs):
+        return [math.floor(inputs[0] / inputs[1])]
 
 
 class SubtractIntFunction(Function):
@@ -88,8 +97,8 @@ class SubtractIntFunction(Function):
         super().__init__(
             [IntegerDataType(), IntegerDataType()], [IntegerDataType()])
 
-    def run(self):
-        pass
+    def run(self, inputs):
+        return [inputs[0] - inputs[1]]
 
 
 class ExponentFunction(Function):
@@ -97,8 +106,8 @@ class ExponentFunction(Function):
         super().__init__(
             [NumberDataType(), NumberDataType()], [NumberDataType()])
 
-    def run(self):
-        pass
+    def run(self, inputs):
+        return [inputs[0] ** inputs[1]]
 
 
 class ExponentIntFunction(Function):
@@ -106,15 +115,15 @@ class ExponentIntFunction(Function):
         super().__init__(
             [IntegerDataType(), IntegerDataType()], [IntegerDataType()])
 
-    def run(self):
-        pass
+    def run(self, inputs):
+        return [inputs[0] ** inputs[1]]
 
 
 class InputNumberFunction(Function):
     def __init__(self):
         super().__init__([], [NumberDataType()])
 
-    def run(self):
+    def run(self, inputs):
         pass
 
 
@@ -122,5 +131,5 @@ class InputIntegerFunction(Function):
     def __init__(self):
         super().__init__([], [IntegerDataType()])
 
-    def run(self):
+    def run(self, inputs):
         pass
