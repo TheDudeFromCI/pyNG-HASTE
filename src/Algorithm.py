@@ -268,6 +268,7 @@ class SearchTree:
                     child.fitness += fitnessTest.getValue(child)
 
                 self.container.addSolution(child)
+
             else:
                 child.heuristic = 0
                 for heuristic in self.env.heuristics:

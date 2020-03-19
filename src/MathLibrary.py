@@ -1,32 +1,6 @@
 from Algorithm import DataType, Function, Axiom
+from StandardLibrary import NumberDataType, IntegerDataType
 import math
-
-
-class NumberDataType(DataType):
-    def connectsTo(self, dataType):
-        return isinstance(dataType, NumberDataType)
-
-
-class IntegerDataType(DataType):
-    def connectsTo(self, dataType):
-        return isinstance(dataType, NumberDataType) \
-            or isinstance(dataType, IntegerDataType)
-
-
-class OutputNumberFunction(Function):
-    def __init__(self):
-        super().__init__([NumberDataType()], [])
-
-    def run(self, inputs):
-        pass
-
-
-class OutputIntegerFunction(Function):
-    def __init__(self):
-        super().__init__([IntegerDataType()], [])
-
-    def run(self, inputs):
-        pass
 
 
 class AddFunction(Function):
@@ -107,6 +81,9 @@ class ExponentFunction(Function):
             [NumberDataType(), NumberDataType()], [NumberDataType()])
 
     def run(self, inputs):
+        if inputs[0] >= 999999 or inputs[1] >= 9999:
+            raise ValueTooLargeError
+
         return [inputs[0] ** inputs[1]]
 
 
@@ -116,20 +93,11 @@ class ExponentIntFunction(Function):
             [IntegerDataType(), IntegerDataType()], [IntegerDataType()])
 
     def run(self, inputs):
+        if inputs[0] >= 999999 or inputs[1] >= 9999:
+            raise ValueTooLargeError
+
         return [inputs[0] ** inputs[1]]
 
 
-class InputNumberFunction(Function):
-    def __init__(self):
-        super().__init__([], [NumberDataType()])
-
-    def run(self, inputs):
-        pass
-
-
-class InputIntegerFunction(Function):
-    def __init__(self):
-        super().__init__([], [IntegerDataType()])
-
-    def run(self, inputs):
-        pass
+class ValueTooLargeError(SystemError):
+    pass
