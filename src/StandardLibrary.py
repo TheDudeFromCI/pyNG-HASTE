@@ -1,6 +1,5 @@
 from Algorithm import Axiom, FitnessTest, Test, DataType, Function, Heuristic
 from Runner import Runner
-import random
 
 
 class NumberDataType(DataType):
@@ -111,14 +110,6 @@ class InputIntegerFunction(Function):
 
     def run(self, inputs):
         pass
-
-
-class RandomHeuristic(Heuristic):
-    def __init__(self, magnitude=0.5):
-        self.magnitude = magnitude
-
-    def getValue(self, graph):
-        return random.uniform(-self.magnitude, self.magnitude)
 
 
 class PreferSmallerHeuristic(Heuristic):

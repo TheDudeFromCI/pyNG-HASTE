@@ -33,9 +33,7 @@ if __name__ == '__main__':
         StandardLibrary.NumberDataType()))
 
     env.addFitnessTest(StandardLibrary.FewerConnectionsFitness(magnitude=0.5))
-
     env.addHeuristic(StandardLibrary.PreferSmallerHeuristic())
-    env.addHeuristic(StandardLibrary.RandomHeuristic())
 
     env.addTest(StandardLibrary.InputOutputTest([2, 7, True], [9]))
     env.addTest(StandardLibrary.InputOutputTest([5, 1, False], [5]))
@@ -51,8 +49,8 @@ if __name__ == '__main__':
         tree.nextItr()
         iterations += 1
 
-        if iterations % 50000 == 0:
-            print('Iteration: {}, Open: {}, Solutions: {}'.format(
+        if iterations % 10000 == 0:
+            print('Iteration: {:,}, Open: {}, Solutions: {}'.format(
                 iterations, len(container.graphs), len(container.solutions)))
             print(container.graphs[-1])
 
