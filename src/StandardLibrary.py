@@ -117,4 +117,4 @@ class PreferSmallerHeuristic(Heuristic):
         self.magnitude = magnitude
 
     def getValue(self, graph):
-        return len(graph.connections) * self.magnitude
+        return len(graph.connections) * -self.magnitude

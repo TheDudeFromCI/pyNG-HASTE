@@ -1,7 +1,9 @@
 import StandardLibrary
 import MathLibrary
 import Algorithm
+from BranchingFactor import BranchingFactor
 import time
+import math
 
 
 if __name__ == '__main__':
@@ -33,7 +35,7 @@ if __name__ == '__main__':
         StandardLibrary.NumberDataType()))
 
     env.addFitnessTest(StandardLibrary.FewerConnectionsFitness(magnitude=0.5))
-    env.addHeuristic(StandardLibrary.PreferSmallerHeuristic())
+    env.addHeuristic(StandardLibrary.PreferSmallerHeuristic(magnitude=-0.1))
 
     env.addTest(StandardLibrary.InputOutputTest([2, 7, True], [9]))
     env.addTest(StandardLibrary.InputOutputTest([5, 1, False], [5]))
@@ -44,21 +46,40 @@ if __name__ == '__main__':
     print('Running...')
     startTime = time.time()
 
+    branching = BranchingFactor()
+
     iterations = 0
-    while not container.isEmpty() and len(container.solutions) == 0:
+    while not container.isEmpty():
+        target = container.peek()
+
+        openCount = len(container.graphs)
+        connections = len(target.connections)
         tree.nextItr()
+
+        newCount = len(container.graphs)
+        branching.addSample(connections, newCount - openCount + 1)
+
         iterations += 1
 
-        if iterations % 10000 == 0:
-            print('Iteration: {:,}, Open: {}, Solutions: {}'.format(
-                iterations, len(container.graphs), len(container.solutions)))
-            print(container.graphs[-1])
+        if iterations % 10000 == 0 or container.isEmpty():
+            endTime = time.time()
+            elapsedTime = endTime - startTime
 
-    endTime = time.time()
-    elapsedTime = endTime - startTime
+            print('Iteration: {:,}, Open: {}, Solutions: {}, Time: {:.1f}s'.format(
+                iterations, len(container.graphs), len(container.solutions), elapsedTime))
+            print(target)
 
-    print('Finished in {} iterations. ({:.1f} s)'.format(iterations, elapsedTime))
-    print('Solutions:', len(container.solutions))
+            print("Branching factor")
+            scale = 1
+            last = 0
+            for i in range(10):
+                bf = branching.getBranchingFactor(i)
+                last = scale
+                scale *= bf
+                print('  {}) {: >4.2f} => {:,}'.format(
+                    i, bf, math.floor(scale + last)))
+
+    print("Top 3 solutions:")
 
     limit = 3
     for solution in container.solutions:

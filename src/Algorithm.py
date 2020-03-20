@@ -183,6 +183,12 @@ class GraphContainer:
 
         return self.graphs.pop()
 
+    def peek(self):
+        if self.isEmpty():
+            raise RuntimeError
+
+        return self.graphs[-1]
+
     def push(self, graph):
         self.graphs.append(graph)
         self.graphs.sort(key=lambda g: g.heuristic)
