@@ -1,3 +1,6 @@
+from heapq import heappush, heappop
+
+
 class DataType:
     def connectsTo(self, dataType):
         raise NotImplementedError
@@ -168,6 +171,9 @@ class NodeGraph:
 
         return False
 
+    def __lt__(self, other):
+        return self.heuristic > other.heuristic
+
 
 class GraphContainer:
     def __init__(self):
@@ -181,21 +187,20 @@ class GraphContainer:
         if self.isEmpty():
             raise RuntimeError
 
-        return self.graphs.pop()
+        return heappop(self.graphs)
 
     def peek(self):
         if self.isEmpty():
             raise RuntimeError
 
-        return self.graphs[-1]
+        return self.graphs[0]
 
     def push(self, graph):
-        self.graphs.append(graph)
-        self.graphs.sort(key=lambda g: g.heuristic)
+        heappush(self.graphs, graph)
 
     def addSolution(self, graph):
         self.solutions.append(graph)
-        self.graphs.sort(key=lambda g: g.fitness, reverse=True)
+        self.solutions.sort(key=lambda g: g.fitness, reverse=True)
 
 
 class Axiom:

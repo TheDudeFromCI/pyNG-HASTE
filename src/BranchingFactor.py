@@ -19,3 +19,10 @@ class BranchingFactor:
             return total / samples
 
         return 0
+
+    def getSamples(self, connections):
+        if connections in self.branches:
+            samples, total = self.branches[connections]
+            return samples
+
+        return 0

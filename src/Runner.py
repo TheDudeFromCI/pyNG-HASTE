@@ -9,7 +9,8 @@ class Runner:
         for inputIndex in range(len(inputs)):
             self.cache[(inputIndex + 1, 0)] = inputs[inputIndex]
 
-        self.__calculateValues(self.graph.nodes[0])
+        if not self.__calculateValues(self.graph.nodes[0]):
+            return []
 
         outputs = []
         for i in range(len(self.graph.nodes[0].function.inputs)):
@@ -28,11 +29,21 @@ class Runner:
         # else:
 
         inputs = []
+        unfinished = False
         for inputIndex in range(len(node.function.inputs)):
             conn = self.graph.getConnectionTo(node, inputIndex)
-            self.__calculateValues(conn.outputNode)
+            if conn is None:
+                unfinished = True
+                continue
 
-            inputs.append(self.cache[(conn.outputNode.index, conn.outputPlug)])
+            if self.__calculateValues(conn.outputNode):
+                inputs.append(
+                    self.cache[(conn.outputNode.index, conn.outputPlug)])
+            else:
+                unfinished = True
+
+        if unfinished:
+            return False
 
         if len(node.function.outputs) == 0:
             outputs = inputs
@@ -41,3 +52,5 @@ class Runner:
 
         for i in range(len(outputs)):
             self.cache[(node.index, i)] = outputs[i]
+
+        return True

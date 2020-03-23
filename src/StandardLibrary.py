@@ -1,3 +1,4 @@
+import random
 from Algorithm import Axiom, FitnessTest, Test, DataType, Function, Heuristic
 from Runner import Runner
 
@@ -23,7 +24,11 @@ class MaxConnectionsAxiom(Axiom):
         self.max = max
 
     def isValid(self, graph):
-        return len(graph.connections) <= self.max
+        inputPlugs = 0
+        for node in graph.nodes:
+            inputPlugs += len(node.function.inputs)
+
+        return inputPlugs <= self.max
 
 
 class FewerConnectionsFitness(FitnessTest):
@@ -118,3 +123,38 @@ class PreferSmallerHeuristic(Heuristic):
 
     def getValue(self, graph):
         return len(graph.connections) * -self.magnitude
+
+
+class RandomHeuristic(Heuristic):
+    def __init__(self, magnitude=1.0):
+        self.magnitude = magnitude * 2
+
+    def getValue(self, graph):
+        return random.random() - self.magnitude
+
+
+class UnlikelyFunctionHeuristic(Heuristic):
+    def __init__(self, function, magnitude=100.0):
+        self.function = function
+        self.magnitude = magnitude
+
+    def getValue(self, graph):
+        for node in graph.nodes:
+            if node.function == self.function:
+                return -self.magnitude
+
+        return 0
+
+
+class CheckForErrorsAxiom(Axiom):
+    def __init__(self, tests):
+        self.tests = tests
+
+    def isValid(self, graph):
+        try:
+            runner = Runner(graph)
+            for test in self.tests:
+                runner.findValues(test)
+            return True
+        except:
+            return False
